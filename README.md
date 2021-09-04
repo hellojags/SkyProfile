@@ -1,2 +1,1 @@
-# SkyProfile
-UX to update MySKy User Profile. It uses user profile-library and dac
+UI to update SKynet(MySky) User Profile. It uses user profile-library and dac

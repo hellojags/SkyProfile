@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "./static/css/main.f860eebe.chunk.css",
+    "main.js": "./static/js/main.b215d1ba.chunk.js",
+    "runtime-main.js": "./static/js/runtime-main.9f78b0f8.js",
+    "static/js/2.1bed967d.chunk.js": "./static/js/2.1bed967d.chunk.js",
+    "index.html": "./index.html",
+    "static/js/2.1bed967d.chunk.js.LICENSE.txt": "./static/js/2.1bed967d.chunk.js.LICENSE.txt",
+    "static/media/Icon ionic-ios-menu.64c5fae0.svg": "./static/media/Icon ionic-ios-menu.64c5fae0.svg",
+    "static/media/copy.9efd510d.svg": "./static/media/copy.9efd510d.svg",
+    "static/media/edit-profile.87a889ad.svg": "./static/media/edit-profile.87a889ad.svg",
+    "static/media/errorGrahpics.02c29549.svg": "./static/media/errorGrahpics.02c29549.svg",
+    "static/media/exit-log-out.2.87a4c091.svg": "./static/media/exit-log-out.2.87a4c091.svg",
+    "static/media/notification.debf384b.svg": "./static/media/notification.debf384b.svg",
+    "static/media/settingIconGreen.80c44f89.svg": "./static/media/settingIconGreen.80c44f89.svg",
+    "static/media/user-profile-back.52d33c21.svg": "./static/media/user-profile-back.52d33c21.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9f78b0f8.js",
+    "static/js/2.1bed967d.chunk.js",
+    "static/css/main.f860eebe.chunk.css",
+    "static/js/main.b215d1ba.chunk.js"
+  ]
+}

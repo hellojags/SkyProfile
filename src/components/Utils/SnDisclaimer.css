@@ -1,0 +1,14 @@
+.icon-c2-main-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
+  }
+  .desc-c2-div {
+    padding-left: 10px;
+    padding-top: 5px;
+    font-size : 17px;
+    color: rgb(148, 145, 145);
+    text-align: center;
+  }
+  
