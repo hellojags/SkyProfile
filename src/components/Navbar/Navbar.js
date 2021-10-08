@@ -6,6 +6,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
+import { ReactComponent as AppLogo } from '../../assets/img/icons/skyprofile.svg'
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import MoreIcon from "@material-ui/icons/MoreVert";
@@ -111,11 +112,20 @@ const useStyles = makeStyles((theme) => ({
   AccountBoxIcon: {
     color: "#1DBF73",
   },
+  AppLogo: {
+    width: 35,
+    height: 35,
+    color: "#1DBF73",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   logo: {
-    color: "#000",
-    fontSize: 20,
+    color: "#1DBF73",
+    paddingLeft: 10,
+    fontSize: 30,
     fontFamily: "Nunito",
-    fontWeight: "fontWeightBold",
+    fontWeight: 800,
     "@media only screen and (max-width: 575px)": {
       fontSize: 13,
     },
@@ -337,10 +347,13 @@ export default function Navbar() {
             <CustomMenuIcon />
           </IconButton>
           <Box className="logo-top" display="flex" alignItems="center">
-            <AccountBoxIcon
+            {/* <AccountBoxIcon
               className={classes.AccountBoxIcon}
               style={{ fontSize: 44, marginRight: 8 }}
-            />
+            /> */}
+             <div className={classes.AppLogo}>
+                  <AppLogo/>
+                </div>
             <Typography className={classes.logo}>SkyProfile</Typography>
           </Box>
           {/* <Box display="flex" alignItems="flex-end" flexWrap="wrap" flexShrink={1}>

@@ -1,11 +1,14 @@
-import {Box, Button, Typography } from "@material-ui/core";
+import { Box, Button, Typography } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Badge from "@material-ui/core/Badge";
+import { ReactComponent as AppLogo } from '../../assets/img/icons/skyprofile.svg'
 import IconButton from "@material-ui/core/IconButton";
+import Icon from '@material-ui/core/Icon';
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
+import AppIcon from '../../svg/AppIcon';
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
@@ -49,10 +52,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   logo: {
-    color: "#000",
-    fontSize: 20,
+    color: "#1DBF73",
+    paddingLeft: 10,
+    fontSize: 30,
     fontFamily: "Nunito",
-    fontWeight: "fontWeightBold",
+    fontWeight: 800,
     "@media only screen and (max-width: 575px)": {
       fontSize: 13,
     },
@@ -143,6 +147,14 @@ const useStyles = makeStyles((theme) => ({
   AccountBoxIcon: {
     color: "#1DBF73",
   },
+  AppLogo: {
+    width: 35,
+    height: 35,
+    color: "#1DBF73",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   MenuRoot: {
     marginTop: "40px",
   },
@@ -188,6 +200,7 @@ const useStyles = makeStyles((theme) => ({
   loginBtn: {
     background: "#1DBF73!important",
     height: 38,
+
     width: 135,
     color: "#fff",
     marginLeft: "1rem",
@@ -294,12 +307,15 @@ export default function LandingPageNavbar() {
       <AppBar position="static" className={classes.root} color="default">
         <Toolbar className={classes.toolBarRoot}>
           <div className="logo-top">
-          <Box className="logo-top" display="flex" alignItems="center">
-            <AccountBoxIcon
+            <Box className="logo-top" display="flex" alignItems="center">
+              {/* <AccountBoxIcon
               className={classes.AccountBoxIcon}
               style={{ fontSize: 44 }}
-            />
-            <Typography className={classes.logo}>SkyProfile</Typography>
+            /> */}
+                <div className={classes.AppLogo}>
+                  <AppLogo/>
+                </div>
+              <Typography className={classes.logo}>SkyProfile</Typography>
             </Box>
           </div>
         </Toolbar>
