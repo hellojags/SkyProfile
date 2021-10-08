@@ -1,6 +1,6 @@
 {
   "short_name": "SkyProfile",
-  "description": "Skynet App to manage MySky User Profile.",
+  "description": "MySky user profile management app.",
   "name": "SkyProfile",
   "icons": [
     {
