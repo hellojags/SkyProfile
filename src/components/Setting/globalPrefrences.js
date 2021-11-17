@@ -200,7 +200,7 @@ const statusPrivacyOptions = [
 ];
 const lastSeenPrivacyOptions = [
   { value: LastSeenPrivacyType.PRIVATE, label: LastSeenPrivacyType.PRIVATE },
-  { value: LastSeenPrivacyType.PUBLIC_NO_TS, label: LastSeenPrivacyType.PUBLIC_NO_TS },
+  //{ value: LastSeenPrivacyType.PUBLIC_NO_TS, label: LastSeenPrivacyType.PUBLIC_NO_TS },
   { value: LastSeenPrivacyType.PUBLIC_TS, label: LastSeenPrivacyType.PUBLIC_TS },
 ];
 
@@ -269,12 +269,10 @@ const GlobalPrefrences = () => {
 
   const getTimeInLocalFormat = (timestamp) => {
     try {
-      if(timestamp == 0 || timestamp == "0")
-      {
+      if (timestamp == 0 || timestamp == "0") {
         return " NA";
       }
-      else
-      {
+      else {
         let ts = new Date(Number(timestamp));
         return ts.toLocaleString();
       }
@@ -370,12 +368,12 @@ const GlobalPrefrences = () => {
                 <Box>
                   <h2>
                     Global Preferences {" "}
-                    <Typography color="Secondary">(* This will overwrite all Skapp specific preferences)</Typography>
+                    <Typography color="Secondary">[ * Global privacy preferences configuration will take precedence over Skapp specific preferences ]</Typography>
                   </h2>
 
                   <Box>
                     {/* {JSON.stringify(globalUserStatus)} */}
-                    <Typography style={{ color: "#4248f5",fontWeight: "bold" }}> LastSeen on Skynet :{getTimeInLocalFormat(globalUserStatus.lastSeen)}
+                    <Typography style={{ fontWeight: "bold" }}> LastSeen on Skynet :{getTimeInLocalFormat(globalUserStatus.lastSeen)}
                     </Typography>
 
                   </Box>
@@ -430,6 +428,9 @@ const GlobalPrefrences = () => {
                     </Grid>
                   </Box>
                 </Box>
+                <Box marginTop={2}>
+                  <Typography> [ * It may take upto 2 minutes for privacy changes to reflect on UserStatus ]</Typography>
+                </Box>
               </form>
             )}
           </Formik>
@@ -440,7 +441,7 @@ const GlobalPrefrences = () => {
           </Box>
           <Box>
             <h2>
-              Per Skapp Preferences{" "}
+              Skapps Preferences{" "}
             </h2>
           </Box>
         </Box>
@@ -454,7 +455,7 @@ const GlobalPrefrences = () => {
           >
             {(formik) => (
               <form onSubmit2={formik.handleSubmit}>
-                <Box>  <h3 color="">Skapp : {hostSkapp} </h3> </Box>
+                <Box>  <h3 color="">Skapp Name : {hostSkapp} </h3> </Box>
                 <Box>
                   {/* {JSON.stringify(skappUserStatus)} */}
                   <Typography color="Primary" style={{ fontWeight: "bold" }}> UserStatus: {skappUserStatus.status} , LastSeen:{getTimeInLocalFormat(skappUserStatus.lastSeen)}
@@ -504,6 +505,9 @@ const GlobalPrefrences = () => {
                   >
                     <Add /> Save{" "}
                   </Button>
+                </Box>
+                <Box marginTop={2}>
+                  <Typography> [ * It may take upto 2 minutes for privacy changes to reflect on UserStatus ]</Typography>
                 </Box>
               </form>
             )}
