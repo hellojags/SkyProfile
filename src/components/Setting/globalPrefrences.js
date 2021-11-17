@@ -240,8 +240,8 @@ const GlobalPrefrences = () => {
     setSkappUserStatus(JSON.parse(JSON.stringify(latestStatus)));
   }
   useEffect(() => {
-    getGlobalUserStatus(getRealtimeUpdate);
-    getSkappUserStatus(hostSkapp, getRealtimeUpdate1);
+    getGlobalUserStatus(onGlobalUserStatusChange);
+    getSkappUserStatus(hostSkapp, onSkappUserStatusChange);
     // (async () => {
     //   await getGlobalUserStatus(getRealtimeUpdate);
     // })();
