@@ -385,7 +385,6 @@ const Profile = () => {
   };
 
   const setProfileFormicObj = (profile) => {
-    //console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ profile from DAC ="+ JSON.stringify(profile))
     if (profile && profile?.username) {
       let temp = { ...initailValueFormikObj, ...profile };
       temp.otherConnections = [];
@@ -451,7 +450,6 @@ const Profile = () => {
       ],
       avatar: [avatar],
     };
-    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ BEFORE SAVING PROFILE using DAC =" + JSON.stringify(profileJSON))
     await setProfile(profileJSON);
     dispatch(setUserProfileAction(profileJSON));
     setIsSuccess(true);

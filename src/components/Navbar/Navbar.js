@@ -219,8 +219,8 @@ export default function Navbar() {
         setPerson({ username: userProfile?.username, url: avatarURl });
         dispatch(setUserProfileAction(userProfile));
       //console.log("#### On Refresh : Reload Redux State #### [userPrefrences]");
-        const userPrefrences = await getPreferences();
-        dispatch(setUserPreferencesAction(userPrefrences));
+        const preferencesMaster = await getPreferences();
+        dispatch(setUserPreferencesAction(preferencesMaster));
       }
     };
     reloadReduxState();

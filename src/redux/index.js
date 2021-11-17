@@ -5,7 +5,6 @@ import SnLoaderReducer from "./action-reducers-epic/SnLoaderReducer"
 import SnUserProfile from "./action-reducers-epic/SnUserProfileReducer"
 import { snUserProfileEpic } from "./action-reducers-epic/SnUserProfileEpic"
 import SnUserPreferences from "./action-reducers-epic/SnUserPreferencesReducer"
-import { snUserPreferencesEpic } from "./action-reducers-epic/SnUserPreferencesEpic"
 import SnUploadListReducer from "./action-reducers-epic/SnUploadListReducer";
 import SnUserSessionReducer from "./action-reducers-epic/SnUserSessionReducer";
 
@@ -22,7 +21,6 @@ const rootReducer = combineReducers({
 
 const rootEpic = combineEpics(
   snUserProfileEpic,
-  snUserPreferencesEpic,
 )
 
 const observableMiddleware = createEpicMiddleware()

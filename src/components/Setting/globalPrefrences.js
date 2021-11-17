@@ -1,13 +1,14 @@
-import { Box, Button, makeStyles, Snackbar } from "@material-ui/core";
-import { Add } from "@material-ui/icons";
+import { Box, Grid, Button, makeStyles, Snackbar, Divider, colors, Typography } from "@material-ui/core";
+import { Add, LensTwoTone } from "@material-ui/icons";
 import Alert from "@material-ui/lab/Alert";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoaderDisplay } from "../../redux/action-reducers-epic/SnLoaderAction";
 import { setUserPreferencesAction } from "../../redux/action-reducers-epic/SnUserPreferencesAction";
-import { setPreferences } from "../../service/SnSkappService";
+import { setSkappPreferences, setGlobalPreferences, getSkappUserStatus, getGlobalUserStatus } from "../../service/SnSkappService";
 import { SnSelect, SnSwitch } from "../Utils/SnFormikControlls";
+import { LastSeenPrivacyType } from "@skynethub/userprofile-library";
 
 const useStyles = makeStyles((theme) => ({
   ProfileRoot: {
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     display: "inlin-flex",
     alignItems: "center",
     float: "right",
+    height: 45,
     minWidth: 130,
     "& svg": {
       fontSize: "19px",
@@ -190,36 +192,130 @@ const useStyles = makeStyles((theme) => ({
 
 const portalOptions = [
   { value: "https://siasky.net/", label: "https://siasky.net/" },
-  { value: "https://skyportal.xyz", label: "https://skyportal.xyz" },
+  { value: "https://skyportal.xyz/", label: "https://skyportal.xyz/" },
 ];
+const statusPrivacyOptions = [
+  { value: "Private", label: "Private" },
+  { value: "Public", label: "Public" },
+];
+const lastSeenPrivacyOptions = [
+  { value: LastSeenPrivacyType.PRIVATE, label: LastSeenPrivacyType.PRIVATE },
+  { value: LastSeenPrivacyType.PUBLIC_NO_TS, label: LastSeenPrivacyType.PUBLIC_NO_TS },
+  { value: LastSeenPrivacyType.PUBLIC_TS, label: LastSeenPrivacyType.PUBLIC_TS },
+];
+
 const initailValueFormikObGB = {
   darkmode: true,
-  portal: "https://siasky.net",
+  portal: "https://siasky.net/",
+  statusPrivacy: "Private",
+  lastSeenPrivacy: "Private",
+  updatefrequency: 0
 };
-
+const initailUserStatus = {
+  status: "None",
+  lastSeen: "0"
+};
 const GlobalPrefrences = () => {
+  const [skappUserStatus, setSkappUserStatus] = useState(initailUserStatus);
+  const [globalUserStatus, setGlobalUserStatus] = useState(initailUserStatus);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [formikObjGB, setFormikObGB] = useState(initailValueFormikObGB); // to store Formik Form data
+  const [formikObjGB, setFormikObGB] = useState(initailValueFormikObGB);
+  const [skappFormikObjGB, setSkappFormikObGB] = useState(initailValueFormikObGB);
+
+
+  // to store Formik Form data
   const classes = useStyles();
   const userPreferences = useSelector((state) => state.snUserPreferences);
+  const hostSkapp = window.location.hostname === 'localhost' ? "localhost" : "skyprofile.hns";
+
+  //console.log(`userPreferences ${JSON.stringify(userPreferences)}`)
   const dispatch = useDispatch();
+  const onGlobalUserStatusChange = async (latestStatus) => {
+    console.log(`callback :: onGlobalUserStatusChange :: ${JSON.stringify(latestStatus)}`);
+    setGlobalUserStatus(JSON.parse(JSON.stringify(latestStatus)));
+  }
+  const onSkappUserStatusChange = async (latestStatus) => {
+    console.log(`callback :: onSkappUserStatusChange :: ${JSON.stringify(latestStatus)}`);
+    setSkappUserStatus(JSON.parse(JSON.stringify(latestStatus)));
+  }
+  useEffect(() => {
+    getGlobalUserStatus(getRealtimeUpdate);
+    getSkappUserStatus(hostSkapp, getRealtimeUpdate1);
+    // (async () => {
+    //   await getGlobalUserStatus(getRealtimeUpdate);
+    // })();
+    // (async () => {
+    //   await getSkappUserStatus(hostSkapp, getRealtimeUpdate1);
+    // })();
+  }, []);
 
   useEffect(() => {
     setFormikObGB({
-      darkmode: userPreferences?.darkmode,
-      portal: userPreferences?.portal,
+      darkmode: userPreferences?.global?.darkmode,
+      portal: userPreferences?.global?.portal,
+      statusPrivacy: userPreferences?.global?.userStatus?.statusPrivacy,
+      lastSeenPrivacy: userPreferences?.global?.userStatus?.lastSeenPrivacy,
+      updatefrequency: userPreferences?.global?.userStatus?.updatefrequency,
+    });
+    setSkappFormikObGB({
+      darkmode: userPreferences?.[hostSkapp]?.darkmode,
+      portal: userPreferences?.[hostSkapp]?.portal,
+      statusPrivacy: userPreferences?.[hostSkapp]?.userStatus?.statusPrivacy,
+      lastSeenPrivacy: userPreferences?.[hostSkapp]?.userStatus?.lastSeenPrivacy,
+      updatefrequency: userPreferences?.[hostSkapp]?.userStatus?.updatefrequency,
     });
   }, [userPreferences]);
+
+  const getTimeInLocalFormat = (timestamp) => {
+    try {
+      if(timestamp == 0 || timestamp == "0")
+      {
+        return " NA";
+      }
+      else
+      {
+        let ts = new Date(Number(timestamp));
+        return ts.toLocaleString();
+      }
+    }
+    catch (e) {
+      console.log(`Error converting timestamp to localtime format ${e}`);
+      return ts;
+    }
+  }
 
   const submitGlobalPreferencesForm = async (values) => {
     dispatch(setLoaderDisplay(true));
     let preferencesJSON = {
       darkmode: values.darkmode,
       portal: values.portal,
+      userStatus: {
+        statusPrivacy: values.statusPrivacy,
+        lastSeenPrivacy: values.lastSeenPrivacy,
+        updatefrequency: values.updatefrequency,
+      }
     };
-    await setPreferences(preferencesJSON);
-    dispatch(setUserPreferencesAction(preferencesJSON));
+    await setGlobalPreferences(preferencesJSON);
+    userPreferences.global = preferencesJSON;
+    dispatch(setUserPreferencesAction(userPreferences));
+    setIsSuccess(true);
+    dispatch(setLoaderDisplay(false));
+  };
+  const submitSkappPreferencesForm = async (values) => {
+    dispatch(setLoaderDisplay(true));
+    let preferencesJSON = {
+      darkmode: values.darkmode,
+      portal: values.portal,
+      userStatus: {
+        statusPrivacy: values.statusPrivacy,
+        lastSeenPrivacy: values.lastSeenPrivacy,
+        updatefrequency: values.updatefrequency,
+      }
+    };
+    await setSkappPreferences(preferencesJSON);
+    userPreferences[hostSkapp] = preferencesJSON;
+    dispatch(setUserPreferencesAction(userPreferences));
     setIsSuccess(true);
     dispatch(setLoaderDisplay(false));
   };
@@ -232,7 +328,7 @@ const GlobalPrefrences = () => {
     setIsError(false);
   };
 
-//console.log(formikObjGB);
+  //console.log(formikObjGB);
 
   return (
     <div className={classes.ProfileRoot}>
@@ -270,21 +366,26 @@ const GlobalPrefrences = () => {
             onSubmit={submitGlobalPreferencesForm}
           >
             {(formik) => (
-              <form onSubmit={formik.handleSubmit}>
-                <h2>
-                  Global User Prefrences{" "}
-                  <Button
-                    className={classes.submitBtn}
-                    onClick={formik.handleSubmit}
-                  >
-                    <Add /> Save Changes{" "}
-                  </Button>
-                </h2>
+              <form onSubmit1={formik.handleSubmit}>
+                <Box>
+                  <h2>
+                    Global Preferences {" "}
+                    <Typography color="Secondary">(* This will overwrite all Skapp specific preferences)</Typography>
+                  </h2>
+
+                  <Box>
+                    {/* {JSON.stringify(globalUserStatus)} */}
+                    <Typography style={{ color: "#4248f5",fontWeight: "bold" }}> LastSeen on Skynet :{getTimeInLocalFormat(globalUserStatus.lastSeen)}
+                    </Typography>
+
+                  </Box>
+                </Box>
                 <Box
                   display="flex"
                   className={`${classes.formRow} formSiteRow`}
                 >
-                  <Box className={`${classes.inputContainer}`} flex={1}>
+                  {/* <Box className={`${classes.inputContainer}`} flex={1}> */}
+                  <Box className={`${classes.inputContainer}`}>
                     <SnSwitch label="Dark Mode" name="darkmode" />
                   </Box>
                   <Box className={`${classes.inputContainer}`} flex={1}>
@@ -297,6 +398,112 @@ const GlobalPrefrences = () => {
                       />
                     </Box>
                   </Box>
+                  <Box className={`${classes.inputContainer}`} flex={1}>
+                    <label>Status Privacy</label>
+                    <Box>
+                      <SnSelect
+                        label="Status Privacy"
+                        name="statusPrivacy"
+                        options={statusPrivacyOptions}
+                      />
+                    </Box>
+                  </Box>
+                  <Box className={`${classes.inputContainer}`} flex={1}>
+                    <label>LastSeen Privacy</label>
+                    <Box>
+                      <SnSelect
+                        label="LastSeen Privacy"
+                        name="lastSeenPrivacy"
+                        options={lastSeenPrivacyOptions}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    alignItems="flex-end">
+                    <Grid >
+                      <Button
+                        className={classes.submitBtn}
+                        onClick={formik.handleSubmit}
+                      >
+                        <Add /> Save {" "}
+                      </Button>
+                    </Grid>
+                  </Box>
+                </Box>
+              </form>
+            )}
+          </Formik>
+        }
+        <Box marginTop={5} marginBottom={5}>
+          <Box marginBottom={3}>
+            <Divider />
+          </Box>
+          <Box>
+            <h2>
+              Per Skapp Preferences{" "}
+            </h2>
+          </Box>
+        </Box>
+        {
+          <Formik
+            initialValues={skappFormikObjGB}
+            validateOnChange={true}
+            validateOnBlur={true}
+            enableReinitialize={true}
+            onSubmit={submitSkappPreferencesForm}
+          >
+            {(formik) => (
+              <form onSubmit2={formik.handleSubmit}>
+                <Box>  <h3 color="">Skapp : {hostSkapp} </h3> </Box>
+                <Box>
+                  {/* {JSON.stringify(skappUserStatus)} */}
+                  <Typography color="Primary" style={{ fontWeight: "bold" }}> UserStatus: {skappUserStatus.status} , LastSeen:{getTimeInLocalFormat(skappUserStatus.lastSeen)}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  className={`${classes.formRow} formSiteRow`}
+                >
+                  <Box className={`${classes.inputContainer}`}>
+                    {/* <Box className={`${classes.inputContainer}`} flex={1}> */}
+                    <SnSwitch label="Dark Mode" name="darkmode" />
+                  </Box>
+                  <Box className={`${classes.inputContainer}`} flex={1}>
+                    <label>Skynet Portal</label>
+                    <Box>
+                      <SnSelect
+                        label="Skynet Portal"
+                        name="portal"
+                        options={portalOptions}
+                      />
+                    </Box>
+                  </Box>
+                  <Box className={`${classes.inputContainer}`} flex={1}>
+                    <label>Status Privacy</label>
+                    <Box>
+                      <SnSelect
+                        label="Status Privacy"
+                        name="statusPrivacy"
+                        options={statusPrivacyOptions}
+                      />
+                    </Box>
+                  </Box>
+                  <Box className={`${classes.inputContainer}`} flex={1}>
+                    <label>LastSeen Privacy</label>
+                    <Box>
+                      <SnSelect
+                        label="LastSeen Privacy"
+                        name="lastSeenPrivacy"
+                        options={lastSeenPrivacyOptions}
+                      />
+                    </Box>
+                  </Box>
+                  <Button
+                    className={classes.submitBtn}
+                    onClick={formik.handleSubmit}
+                  >
+                    <Add /> Save{" "}
+                  </Button>
                 </Box>
               </form>
             )}

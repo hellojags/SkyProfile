@@ -65,18 +65,14 @@ const Login = () => {
     (async () => {
 
       const { loggedIn, userSession } = await initMySky();
-      //console.log(">>>>>>>>>>>>>>>> loggedIn" + loggedIn);
       if (loggedIn == true) {
-        //console.log("$$$$$$$$$ checkActiveLogin :: loggedIn = " + loggedIn);
         dispatch(setUserSession(userSession));
         history.push("/userprofile");
       }
       else {
-        //console.log("$$$$$$$$$ checkActiveLogin :: loggedIn = " + loggedIn);
         dispatch(setUserSession(userSession));
       }
     })();
-    //console.log("$$$$$$$$$ checkActiveLogin :: Redirecting to  /userprofile ");
   }, []);
 
 
@@ -106,8 +102,8 @@ const Login = () => {
         dispatch(setUserSession(userSession));
         const userProfile = await getProfile();
         dispatch(setUserProfileAction(userProfile));
-        const userPrefrences = await getPreferences();
-        dispatch(setUserPreferencesAction(userPrefrences));
+        const preferencesMaster = await getPreferences();
+        dispatch(setUserPreferencesAction(preferencesMaster));
         dispatch(setLoaderDisplay(false));
         history.push("/userprofile");
       }

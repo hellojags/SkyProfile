@@ -4,6 +4,7 @@ import { SocialDAC } from "social-dac-library";
 import store from "../redux";
 import { IDB_STORE_SKAPP, setJSONinIDB } from "./SnIndexedDB";
 
+
 const portal =
   window.location.hostname === 'localhost' ? 'https://siasky.net' : undefined;
 const client = new SkynetClient(portal);
@@ -15,7 +16,7 @@ export const initMySky = async () => {
   try {
     // Initialize MySky.
     //const mySky = await client.loadMySky(hostApp, { dev: true, debug: true });
-    const mySky = await client.loadMySky(hostApp);
+    const mySky = await client.loadMySky(hostApp,{debug: false });
     const userProfileDAC = new UserProfileDAC();
     const socialDAC = new SocialDAC();
     await mySky.loadDacs(userProfileDAC, socialDAC);

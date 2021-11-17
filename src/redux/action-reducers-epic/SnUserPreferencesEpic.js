@@ -3,14 +3,14 @@ import { switchMap, map } from "rxjs/operators"
 import { from } from "rxjs"
 import { EPIC_TY_SET_USER_PREFERENCES } from "../SnActionConstants"
 import { setUserPreferencesAction } from "./SnUserPreferencesAction"
-import { setPreferences } from "../../service/SnSkappService"
+import { setSkappPreferences } from "../../service/SnSkappService"
 
-export const snUserPreferencesEpic = (action$) =>
-  action$.pipe(
-    ofType(EPIC_TY_SET_USER_PREFERENCES),
-    switchMap((action) =>
-      from(setPreferences(action.payload)).pipe(
-        map((res) => setUserPreferencesAction(action.payload))
-      )
-    )
-  )
+// export const snUserPreferencesEpic = (action$) =>
+//   action$.pipe(
+//     ofType(EPIC_TY_SET_USER_PREFERENCES),
+//     switchMap((action) =>
+//       from(setSkappPreferences(action.payload)).pipe(
+//         map((res) => setUserPreferencesAction(action.payload))
+//       )
+//     )
+//   )

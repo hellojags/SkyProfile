@@ -90,6 +90,7 @@ const Settings = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  
 
   return (
     <Fragment>
@@ -101,6 +102,7 @@ const Settings = () => {
             </Box> */}
 
       <div className={classes.root}>
+
         <AppBar
           className={classes.tabNavigation}
           position="static"
@@ -112,7 +114,7 @@ const Settings = () => {
             aria-label="simple tabs example"
           >
             <Tab label="User Profile" {...a11yProps(0)} />
-            <Tab label="User Preferences" {...a11yProps(1)} />
+            <Tab label="User Preferences (ALPHA)" {...a11yProps(1)} />
             {/* <Tab label="Billing" {...a11yProps(2)} /> */}
           </Tabs>
         </AppBar>
